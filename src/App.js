@@ -1,6 +1,7 @@
 import React , { useState } from 'react'
 
 import ItemOne from './components/ItemOne'
+import ItemTwo from './components/ItemTwo'
 
 import {
     Tabs,
@@ -12,6 +13,7 @@ import {
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 import TrendingUp from '@material-ui/icons/TrendingUp'
+import ListAlt from '@material-ui/icons/ListAlt'
 
 const TabPanel = props => {
     const { children, value, index, ...other } = props
@@ -92,14 +94,14 @@ const App = props => {
                 aria-label="styled tabs example"
             >
                 <StyledTab label='Cambio' icon={<TrendingUp />} {...a11yProps(0)} />
-                <StyledTab label='Item One' icon={<TrendingUp />} {...a11yProps(1)} />
+                <StyledTab label='Registro' icon={<ListAlt />} {...a11yProps(1)} />
                 <StyledTab label='Item One' icon={<TrendingUp />} {...a11yProps(2)} />
             </StyledTabs>
             <TabPanel value={value} index={0}>
                 <ItemOne />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                item 1
+                <ItemTwo />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 item 2
