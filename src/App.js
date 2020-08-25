@@ -1,19 +1,24 @@
 import React , { useState } from 'react'
 
-import ItemOne from './components/ItemOne'
-import ItemTwo from './components/ItemTwo'
+import ChangeData from './components/ChangeData'
+import RegisterHistory from './components/RegisterHistory'
+import { default as SettingsPanel } from './components/Settings'
+import ShortCode from './components/ShortCode'
+import Header from './components/Header'
 
 import {
     Tabs,
     Tab,
-    Typography,
-    Box
+    Box,
+    Grid
 } from '@material-ui/core'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 import TrendingUp from '@material-ui/icons/TrendingUp'
 import ListAlt from '@material-ui/icons/ListAlt'
+import Settings from '@material-ui/icons/Settings'
+import ShortText from '@material-ui/icons/ShortText'
 
 const TabPanel = props => {
     const { children, value, index, ...other } = props
@@ -29,9 +34,7 @@ const TabPanel = props => {
             {
                 value === index && (
                     <Box p={3}>
-                        <Typography>
-                            {children}
-                        </Typography>
+                        {children}
                     </Box>
                 )
             }        
@@ -50,8 +53,9 @@ const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        backgroundColor: '#2e1534',
-        color: '#fff'
+        backgroundColor: '#23272a',
+        color: '#fff',
+        minHeight: '100vh'
     }
 }))
 
@@ -63,7 +67,7 @@ const StyledTabs = withStyles({
         '& > span': {
             maxWidth: 40,
             width: '100%',
-            backgroundColor: '#635ee7',
+            backgroundColor: '#2196f3',
         },
     },
 })((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />)
@@ -87,26 +91,41 @@ const App = props => {
     }
 
     return (
-        <div className={classes.root}>
-            <StyledTabs 
-                value={value} 
-                onChange={handleChange} 
-                aria-label="styled tabs example"
-            >
-                <StyledTab label='Cambio' icon={<TrendingUp />} {...a11yProps(0)} />
-                <StyledTab label='Registro' icon={<ListAlt />} {...a11yProps(1)} />
-                <StyledTab label='Item One' icon={<TrendingUp />} {...a11yProps(2)} />
-            </StyledTabs>
-            <TabPanel value={value} index={0}>
-                <ItemOne />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ItemTwo />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                item 2
-            </TabPanel>
-        </div>
+        <Grid 
+            container
+            direction='row'
+            justify-content='space-between'
+            alignItems='flex-start'
+            className={classes.root}
+        >
+            <Grid item xs={12} md={12} sm={12}>
+                <Header />
+            </Grid>
+            <Grid item xs={12} md={12} sm={12} style={{minHeight:'80vh'}}>
+                <StyledTabs 
+                    value={value} 
+                    onChange={handleChange} 
+                    aria-label="styled tabs example"
+                >
+                    <StyledTab label='Cambio' icon={<TrendingUp />} {...a11yProps(0)} />
+                    <StyledTab label='Registro' icon={<ListAlt />} {...a11yProps(1)} />
+                    <StyledTab label='Settings' icon={<Settings />} {...a11yProps(2)} />
+                    <StyledTab label='Shortcode' icon={<ShortText />} {...a11yProps(3)} />
+                </StyledTabs>
+                <TabPanel value={value} index={0}>
+                    <ChangeData />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <RegisterHistory />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <SettingsPanel />
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <ShortCode />
+                </TabPanel>
+            </Grid>
+        </Grid>
     )
 }
 

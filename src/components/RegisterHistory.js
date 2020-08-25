@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: '#2e1534',
+        backgroundColor: '#2196f3',
         color: '#fff',
     },
     body: {
@@ -38,7 +38,7 @@ const StyledTableCell = withStyles((theme) => ({
     },
 }))(TableCell)
 
-const ItemTwo = props => {
+const RegisterHistory = props => {
 
     const classes = useStyles()
 
@@ -59,7 +59,7 @@ const ItemTwo = props => {
             <Card>
                 <CardContent>
                     <Box mb={2}>
-                        <Typography component='span' variant='h5' gutterBottom>
+                        <Typography variant='h5' gutterBottom>
                             Registro
                         </Typography>
                     </Box>
@@ -195,4 +195,4 @@ const ItemTwo = props => {
    )
 }
 
-export default ItemTwo
+export default RegisterHistory

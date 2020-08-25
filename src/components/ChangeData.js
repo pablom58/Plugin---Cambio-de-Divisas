@@ -11,7 +11,7 @@ import {
     Button
 } from '@material-ui/core'
 
-const ItemOne = props => {
+const ChangeData = props => {
 
     const info = [
         {
@@ -71,13 +71,13 @@ const ItemOne = props => {
                     <Card>
                         <CardContent>
                             <Box mb={2}>
-                                <Typography component='span' variant='h5' gutterBottom>
+                                <Typography variant='h5' gutterBottom>
                                     Cambio
                                 </Typography>
                             </Box>
                             <Divider />
                             <Box mt={2} mb={2}>
-                                <Typography component='span' variant='h6' gutterBottom>
+                                <Typography variant='h6' gutterBottom>
                                     Cambio Actual:
                                 </Typography>
                             </Box>
@@ -85,10 +85,10 @@ const ItemOne = props => {
                                 info.length
                                     ?   info.map(data => <Fragment key={info.indexOf(data)}>
                                                             <Box mt={2} mb={2} style={{display: 'flex', alignItems: 'center'}}>
-                                                                <Typography component='span' variant='subtitle1' gutterBottom style={{fontWeight: 'bold'}}>
+                                                                <Typography variant='subtitle1' gutterBottom style={{fontWeight: 'bold'}}>
                                                                     { `${data.label}: ` }
                                                                 </Typography>
-                                                                <Typography component='span' variant='body1' gutterBottom style={{marginLeft: '15px'}}>
+                                                                <Typography variant='body1' gutterBottom style={{marginLeft: '15px'}}>
                                                                     { data.value }
                                                                 </Typography>
                                                             </Box>
@@ -102,7 +102,7 @@ const ItemOne = props => {
                     <Card>
                         <CardContent>
                             <Box mb={2}>
-                                <Typography component='span' variant='h5' gutterBottom>
+                                <Typography variant='h5' gutterBottom>
                                     Modificar Datos
                                 </Typography>
                             </Box>
@@ -147,4 +147,4 @@ const ItemOne = props => {
    )
 }
 
-export default ItemOne
+export default ChangeData
