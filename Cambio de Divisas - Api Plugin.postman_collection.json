@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "f0eb8af8-1006-4864-96ec-9888fc44c882",
+		"name": "Cambio de Divisas - Api Plugin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Changes View",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{token}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/changes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"changes"
+					]
+				},
+				"description": "La posicion 0 es el actual\nLa posicion 1 es el Viejo\n\nPara saber si sube o baja"
+			},
+			"response": []
+		},
+		{
+			"name": "Settings View",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{token}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/configInit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"configInit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Values",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{token}}\",\n    \"dollar\": \"10\",\n    \"peso\": \"10\",\n    \"bcv\": \"10\" \n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/update",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Settings",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{token}}\",\n    \"pesoCheck\": 1,\n    \"dollarCheck\": 1,\n    \"bcvCheck\": 0\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/setting",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registers History",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{token}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/returnRegistro",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"returnRegistro"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
