@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
+
+import * as History from '../api/History'
 
 import {
     Box,
@@ -45,14 +47,22 @@ const RegisterHistory = props => {
     const [page,setPage] = useState(0)
     const [rowsPerPage,setRowsPerPage] = useState(10)
 
+    const [registers,setRegisters] = useState([])
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }
 
     const handleChangeRowsPerPage = event => {
-        setRowsPerPage(+event.target.value)
+        setRowsPerPage(event.target.value)
         setPage(0)
     }
+
+    useEffect(() => {
+        History.getData()
+            .then(response => setRegisters(response))
+            .catch(error => console.error(error))
+    },[])
 
     return (
         <Box mt={2} mb={2}>
@@ -76,113 +86,34 @@ const RegisterHistory = props => {
                         <Paper className={classes.root}>
                             <TableContainer className={classes.container}>
                                 <Table stickyHeader aria-label='sticky table'>
-                                    <TableHead>
+                                    <TableHead style={{textAlign: 'center',fontWeight: 'bold'}}>
                                         <TableRow>
-                                            <StyledTableCell>Hola</StyledTableCell>
-                                            <StyledTableCell>Hola</StyledTableCell>
+                                            <StyledTableCell>USUARIO</StyledTableCell>
+                                            <StyledTableCell>PESO</StyledTableCell>
+                                            <StyledTableCell>DOLAR</StyledTableCell>
+                                            <StyledTableCell>BCV</StyledTableCell>
+                                            <StyledTableCell>FECHA</StyledTableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>Hola body</TableCell>
-                                            <TableCell>Hola body</TableCell>
-                                        </TableRow>
+                                        {
+                                            registers.slice((page*rowsPerPage),((page+1)*rowsPerPage)).map(register => <TableRow key={registers.indexOf(register)}>
+                                                                                    <TableCell>{register.username}</TableCell>
+                                                                                    <TableCell>{register.peso}</TableCell>
+                                                                                    <TableCell>{register.dollar}</TableCell>
+                                                                                    <TableCell>{register.bcv}</TableCell>
+                                                                                    <TableCell>{register.dateinfo}</TableCell>
+                                                                                </TableRow>)
+                                        }
                                     </TableBody>
                                 </Table>
                             </TableContainer>
                             <TablePagination
                                 rowsPerPageOptions={[10, 25, 100]}
                                 component='div'
-                                count={100}
+                                count={registers.length}
                                 rowsPerPage={rowsPerPage}
+                                labelRowsPerPage='Cantidad de Registros por Pagina: '
                                 page={page}
                                 onChangePage={handleChangePage}
                                 onChangeRowsPerPage={handleChangeRowsPerPage}
