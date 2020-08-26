@@ -1,0 +1,2 @@
+export const baseUrl = 'http://carloscode.seocontenidos.net/wp-json/monitor/v1'
+export const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWxkb2owM0BnbWFpbC5jb20iLCJyb2wiOiJhZG1pbmlzdHJhdG9yIn19.K20rwBIrZfxxI9MfpzK33pQsT5wIqZqZAMKm8oe3Kos'

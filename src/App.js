@@ -15,10 +15,12 @@ import {
 
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
-import TrendingUp from '@material-ui/icons/TrendingUp'
-import ListAlt from '@material-ui/icons/ListAlt'
-import Settings from '@material-ui/icons/Settings'
-import ShortText from '@material-ui/icons/ShortText'
+import {
+    Timeline,
+    ListAlt,
+    Settings,
+    ShortText
+} from '@material-ui/icons'
 
 const TabPanel = props => {
     const { children, value, index, ...other } = props
@@ -107,7 +109,7 @@ const App = props => {
                     onChange={handleChange} 
                     aria-label="styled tabs example"
                 >
-                    <StyledTab label='Cambio' icon={<TrendingUp />} {...a11yProps(0)} />
+                    <StyledTab label='Cambio' icon={<Timeline />} {...a11yProps(0)} />
                     <StyledTab label='Registro' icon={<ListAlt />} {...a11yProps(1)} />
                     <StyledTab label='Settings' icon={<Settings />} {...a11yProps(2)} />
                     <StyledTab label='Shortcode' icon={<ShortText />} {...a11yProps(3)} />
