@@ -1,2 +1,2 @@
 export const baseUrl = 'http://carloscode.seocontenidos.net/wp-json/monitor/v1'
-export const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWxkb2owM0BnbWFpbC5jb20iLCJyb2wiOiJhZG1pbmlzdHJhdG9yIn19.K20rwBIrZfxxI9MfpzK33pQsT5wIqZqZAMKm8oe3Kos'
+export const token = localStorage.getItem('jwt_access_token') ? localStorage.getItem('jwt_access_token') : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AY2FybG9zY29kZS5zZW9jb250ZW5pZG9zLm5ldCIsInJvbCI6ImFkbWluaXN0cmF0b3IifX0.8TBf67rqJCNHpumMh7BNV63OerLtzrefiepBTxyUQho'

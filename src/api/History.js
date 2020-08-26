@@ -1,8 +1,6 @@
 import { baseUrl , token } from './config'
 
 export const getData = async () => {
-    
-    // let token = localStorage.getItem('jwt_access_token')
 
     // if(!token)
     //     return {

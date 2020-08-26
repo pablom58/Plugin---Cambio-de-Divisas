@@ -35,7 +35,7 @@ const ChangeData = props => {
                                     icon: <TrendingUp style={{marginLeft: '15px'}} />
                                 },
                                 date: '',
-                                user: 'Aldo'
+                                user: ''
                             })
 
     const [inputState,setInputState] = useState({
@@ -57,29 +57,32 @@ const ChangeData = props => {
     useEffect(() => {
         Changes.getData()
             .then(response => {
-                setData({
-                    ...data,
-                    usd: {
-                        value: response[0].dollar,
-                        icon: trendingIcon(parseFloat(response[0].dollar),parseFloat(response[1].dollar))
-                    },
-                    cop: {
-                        value: response[0].peso,
-                        icon: trendingIcon(parseFloat(response[0].peso),parseFloat(response[1].peso))
-                    },
-                    bcv: {
-                        value: response[0].bcv,
-                        icon: trendingIcon(parseFloat(response[0].bcv),parseFloat(response[1].bcv))
-                    },
-                    date: response.dateInfo
-                })
-
-                setInputState({
-                    ...inputState,
-                    usd: parseFloat(response[0].dollar),
-                    cop: parseFloat(response[0].peso),
-                    bcv: parseFloat(response[0].bcv),
-                })
+                if(response.length){
+                    setData({
+                        ...data,
+                        usd: {
+                            value: response[0].dollar,
+                            icon: trendingIcon(parseFloat(response[0].dollar),parseFloat(response[1] !== undefined ? response[1].dollar : 0))
+                        },
+                        cop: {
+                            value: response[0].peso,
+                            icon: trendingIcon(parseFloat(response[0].peso),parseFloat(response[1] !== undefined ? response[1].peso : 0))
+                        },
+                        bcv: {
+                            value: response[0].bcv,
+                            icon: trendingIcon(parseFloat(response[0].bcv),parseFloat(response[1] !== undefined ? response[1].bcv : 0))
+                        },
+                        date: response.dateInfo,
+                        user: response[0].username
+                    })
+    
+                    setInputState({
+                        ...inputState,
+                        usd: parseFloat(response[0].dollar),
+                        cop: parseFloat(response[0].peso),
+                        bcv: parseFloat(response[0].bcv),
+                    })
+                }
             })
             .catch(error => console.error(error))
     },[])
@@ -106,7 +109,7 @@ const ChangeData = props => {
         },
         {
             label: 'Usuario',
-            value: 'Aldo'
+            value: data.user
         }
     ]
 

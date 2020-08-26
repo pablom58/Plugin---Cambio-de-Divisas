@@ -8,7 +8,7 @@ export const getData = async () => {
     //         message: 'Error al validar el token'
     //     }
     
-    let response = await fetch(`${baseUrl}/api/changes`,{
+    let response = await fetch(`${baseUrl}/api/configInit`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -23,7 +23,8 @@ export const getData = async () => {
     return response
 }
 
-export const putData = async data => {
+
+export const saveData = async data => {
 
     // if(!token)
     //     return {
@@ -31,7 +32,7 @@ export const putData = async data => {
     //         message: 'Error al validar el token'
     //     }
     
-    let response = await fetch(`${baseUrl}/api/update`,{
+    let response = await fetch(`${baseUrl}/api/setting`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

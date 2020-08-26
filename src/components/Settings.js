@@ -1,4 +1,6 @@
-import React , { useState } from 'react'
+import React , { useState , useEffect } from 'react'
+
+import * as ApiSettings from '../api/Settings'
 
 import {
     Box,
@@ -16,7 +18,7 @@ import {
     Button,
 } from '@material-ui/core'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles , withStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,6 +38,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+const StyledCheckbox = withStyles({
+    root: {
+        color: '#cacaca',
+        '&$checked': {
+            color: '#2196f3',
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />)
+
 const not = (a,b) => a.filter(value => b.indexOf(value) === -1)
 
 const intersection = (a,b) => a.filter(value => b.indexOf(value) !== -1)
@@ -46,11 +58,42 @@ const Settings = props => {
     const classes = useStyles()
 
     const [checked,setChecked] = useState([])
-    const [left,setLeft] = useState([0,1,2,3])
-    const [right,setRight] = useState([4,5,6,7])
+    const [left,setLeft] = useState([])
+    const [right,setRight] = useState([])
 
     const leftChecked = intersection(checked,left)
     const rightChecked = intersection(checked,right)
+
+    useEffect(() => {
+        ApiSettings.getData()
+            .then(response => {
+                let data = response[0]
+                let show = []
+                let hide = []
+                
+                if(parseInt(data.arg_one)){                    
+                    show.push({label: 'Pesos (COP)',key: 'COP'})
+                }else{
+                    hide.push({label: 'Pesos (COP)',key: 'COP'})
+                }
+
+                if(parseInt(data.arg_two)){                    
+                    show.push({label: 'Dolar (USD)',key: 'USD'})
+                }else{
+                    hide.push({label: 'Dolar (USD)',key: 'USD'})
+                }
+
+                if(parseInt(data.arg_three)){                    
+                    show.push({label: 'BCV (BCV)',key: 'BCV'})
+                }else{
+                    hide.push({label: 'BCV (BCV)',key: 'BCV'})
+                }
+
+                setLeft(hide)
+                setRight(show)
+            })
+            .catch(error => console.error(error))
+    },[])
 
     const handleToggle = value => () => {
         const currentIndex = checked.indexOf(value)
@@ -87,12 +130,22 @@ const Settings = props => {
         setChecked(not(checked, rightChecked))
     }
 
+    const handleSubmit = btn => {
+        ApiSettings.saveData({
+            pesoCheck: right.filter(currency => currency.key === 'COP').length > 0 ? 1 : 0,
+            dollarCheck: right.filter(currency => currency.key === 'USD').length > 0 ? 1 : 0,
+            bcvCheck: right.filter(currency => currency.key === 'BCV').length > 0 ? 1 : 0
+        })
+            .then(response => console.log(response))
+            .catch(error => console.error(error))
+    }
+
     const customList = (title, items) => (
         <Card>
           <CardHeader
             className={classes.cardHeader}
             avatar={
-              <Checkbox
+              <StyledCheckbox
                 onClick={handleToggleAll(items)}
                 checked={numberOfChecked(items) === items.length && items.length !== 0}
                 indeterminate={numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0}
@@ -104,18 +157,18 @@ const Settings = props => {
             subheader={`${numberOfChecked(items)}/${items.length} selected`}
           />
           <Divider />
-          <List style={{minWidth: '100%'}} className={classes.list} dense component="div" role="list">
+          <List style={{minWidth: '100%'}} className={classes.list} dense component='div' role='list'>
             {
-                items.map(value => <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
+                items.map(value => <ListItem key={value.key} role='listitem' button onClick={handleToggle(value)}>
                                         <ListItemIcon>
-                                        <Checkbox
-                                            checked={checked.indexOf(value) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': `transfer-list-all-item-${value}-label` }}
-                                        />
+                                            <StyledCheckbox
+                                                checked={checked.indexOf(value) !== -1}
+                                                tabIndex={-1}
+                                                disableRipple
+                                                inputProps={{ 'aria-labelledby': `transfer-list-all-item-${value.key}-label` }}
+                                            />
                                         </ListItemIcon>
-                                        <ListItemText id={`transfer-list-all-item-${value}-label`} primary={`List item ${value + 1}`} />
+                                        <ListItemText id={`transfer-list-all-item-${value.key}-label`} primary={value.label} />
                                     </ListItem>)
             }
             <ListItem />
@@ -152,29 +205,29 @@ const Settings = props => {
                         </Grid>
                         <Grid item xs={12} md={12} sm={12}>
                             <Box mt={2} mb={2}>
-                                <Grid container spacing={2} alignItems="center" className={classes.root}>
+                                <Grid container spacing={2} alignItems='center' className={classes.root}>
                                     <Grid item xs={4} md={4} sm={4} >
                                         {customList('Ocultos', left)}
                                     </Grid>
                                     <Grid item xs={4} md={4} sm={4}>
-                                        <Grid container direction="column" alignItems="center">
+                                        <Grid container direction='column' alignItems='center'>
                                             <Button
-                                                variant="outlined"
-                                                size="small"
+                                                variant='outlined'
+                                                size='small'
                                                 className={classes.button}
                                                 onClick={handleCheckedRight}
                                                 disabled={leftChecked.length === 0}
-                                                aria-label="move selected right"
+                                                aria-label='move selected right'
                                             >
                                                 &gt;
                                             </Button>
                                             <Button
-                                                variant="outlined"
-                                                size="small"
+                                                variant='outlined'
+                                                size='small'
                                                 className={classes.button}
                                                 onClick={handleCheckedLeft}
                                                 disabled={rightChecked.length === 0}
-                                                aria-label="move selected left"
+                                                aria-label='move selected left'
                                             >
                                                 &lt;
                                             </Button>
@@ -189,6 +242,12 @@ const Settings = props => {
                         <Grid item xs={12} md={12} sm={12}>
                             <Button
                                 variant='contained'
+                                style={{
+                                    background: '#2196f3',
+                                    color: '#fff',
+                                    fontWeight: 'bold'
+                                }}
+                                onClick={handleSubmit}
                                 fullWidth
                             >
                                 Guardar
