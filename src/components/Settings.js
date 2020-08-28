@@ -290,11 +290,12 @@ const Settings = props => {
                         </Grid>
                         <Grid item xs={12} md={12} sm={12} style={{position: 'relative'}}>
                             <Button
-                                variant='contained'
+                                variant='outlined'
                                 style={{
-                                    background: '#2196f3',
-                                    color: fetching ? '#2196f3' : '#fff',
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    background: fetching ? '#23272a' : 'transparent',
+                                    color: '#23272a',
+                                    border: '2px solid #23272a'
                                 }}
                                 onClick={handleSubmit}
                                 className={buttonClassname}

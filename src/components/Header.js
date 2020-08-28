@@ -14,9 +14,7 @@ const Header = props => {
                 </Typography>
             </Box>
             <Box mt={2} mb={2} pl={4}>
-                <Typography variant='subtitle1' style={{fontWeight: 'normal'}}>
-                    Versión: 0.0.2 - Todos los derechos reservados a SeoContenidos - Contacto: support@seocontenidos.net
-                </Typography>
+                <i>Versión: 0.0.2 - Todos los derechos reservados a <a href='https://seocontenidos.net/' style={{color: '#1afffe',textDecoration: 'none'}} target='_blank' >SeoContenidos</a> - Contacto: <span style={{color: '#1afffe'}}>support@seocontenidos.net</span></i>
             </Box>
         </Fragment>
     )

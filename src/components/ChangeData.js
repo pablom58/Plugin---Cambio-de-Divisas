@@ -219,7 +219,7 @@ const ChangeData = props => {
                 spacing={4}
             >
                 <Grid item xs={12} md={6} sm={12}>
-                    <Card>
+                    <Card style={{minHeight: '400px',maxHeight: '400px'}}>
                         <CardContent>
                             <Box mb={2}>
                                 <Typography variant='h5' gutterBottom>
@@ -258,7 +258,7 @@ const ChangeData = props => {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6} sm={12}>
-                    <Card>
+                    <Card style={{minHeight: '400px',maxHeight: '400px'}}>
                         <CardContent>
                             <Box mb={2}>
                                 <Typography variant='h5' gutterBottom>
@@ -287,18 +287,21 @@ const ChangeData = props => {
                                     :   <Fragment />
                             }                            
                         </CardContent>
-                    </Card>
-                    <Box mt={7} style={{position: 'relative'}}>
+                    </Card>                    
+                </Grid>
+                <Grid item xs={12} md={12} sm={12} align='center'>
+                    <Box mt={2} style={{position: 'relative'}}>
                         <Button
                             variant='outlined'
                             style={{
                                 borderColor: fetching ? '#2196f3' : '#fff',
-                                color: fetching ? '#2196f3' : '#fff'
+                                color: fetching ? '#2196f3' : '#fff',
+                                width: '50%',
+                                minWidth: '100px'
                             }}
                             disabled={fetching}
                             className={buttonClassname}
                             onClick={handleSubmit}
-                            fullWidth
                         >
                             Guardar
                         </Button>
