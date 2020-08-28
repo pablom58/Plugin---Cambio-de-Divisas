@@ -17,7 +17,8 @@ import {
     ListItemIcon,
     Checkbox,
     Button,
-    CircularProgress
+    CircularProgress,
+    useMediaQuery
 } from '@material-ui/core'
 
 import { makeStyles , withStyles } from '@material-ui/core/styles'
@@ -76,6 +77,7 @@ const union = (a,b) => [...a , ...not(b,a)]
 
 const Settings = props => {
     const classes = useStyles()
+    const matches = useMediaQuery('(min-width:960px)')
 
     const [fetching,setFetching] = useState(false)
 
@@ -242,11 +244,11 @@ const Settings = props => {
                         <Grid item xs={12} md={12} sm={12}>
                             <Box mt={2} mb={2}>
                                 <Grid container spacing={2} alignItems='center' className={classes.root}>
-                                    <Grid item xs={4} md={4} sm={4} >
+                                    <Grid item xs={12} md={4} sm={12} >
                                         {customList('Ocultos', left)}
                                     </Grid>
-                                    <Grid item xs={4} md={4} sm={4}>
-                                        <Grid container direction='column' alignItems='center'>
+                                    <Grid item xs={12} md={4} sm={12}>
+                                        <Grid container direction={ matches ? 'column' : 'row' } justify='center' alignItems='center'>
                                             <Button
                                                 variant='outlined'
                                                 size='small'
@@ -254,6 +256,12 @@ const Settings = props => {
                                                 onClick={handleCheckedRight}
                                                 disabled={leftChecked.length === 0}
                                                 aria-label='move selected right'
+                                                style={{
+                                                    marginRight: matches ? '0' : '15px',
+                                                    marginTop: matches ? '0' : '25px',
+                                                    marginBottom: matches ? '0' : '25px',
+                                                    transform: `rotateZ(${matches ? 0 : 90}deg)`
+                                                }}
                                             >
                                                 &gt;
                                             </Button>
@@ -264,12 +272,17 @@ const Settings = props => {
                                                 onClick={handleCheckedLeft}
                                                 disabled={rightChecked.length === 0}
                                                 aria-label='move selected left'
+                                                style={{
+                                                    marginTop: '25px',
+                                                    marginBottom: matches ? '0' : '25px',
+                                                    transform: `rotateZ(${matches ? 0 : 90}deg)`
+                                                }}
                                             >
                                                 &lt;
                                             </Button>
                                         </Grid>
                                     </Grid>
-                                    <Grid item xs={4} md={4} sm={4}>
+                                    <Grid item xs={12} md={4} sm={12}>
                                         {customList('En Vista', right)}
                                     </Grid>
                                 </Grid>
