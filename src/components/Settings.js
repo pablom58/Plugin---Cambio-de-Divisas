@@ -1,4 +1,5 @@
 import React , { useState , useEffect } from 'react'
+import clsx from 'clsx'
 
 import * as ApiSettings from '../api/Settings'
 
@@ -16,6 +17,7 @@ import {
     ListItemIcon,
     Checkbox,
     Button,
+    CircularProgress
 } from '@material-ui/core'
 
 import { makeStyles , withStyles } from '@material-ui/core/styles'
@@ -35,6 +37,24 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         margin: theme.spacing(0.5,0)
+    },
+    contCircularProgress: {
+        width: '100%',
+        height: '80%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    buttonSuccess: {
+        backgroundColor: '#2196f3',
+    },
+    buttonProgress: {
+        color: '#fff',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
     }
 }))
 
@@ -57,6 +77,8 @@ const union = (a,b) => [...a , ...not(b,a)]
 const Settings = props => {
     const classes = useStyles()
 
+    const [fetching,setFetching] = useState(false)
+
     const [checked,setChecked] = useState([])
     const [left,setLeft] = useState([])
     const [right,setRight] = useState([])
@@ -65,6 +87,7 @@ const Settings = props => {
     const rightChecked = intersection(checked,right)
 
     useEffect(() => {
+        setFetching(true)
         ApiSettings.getData()
             .then(response => {
                 let data = response[0]
@@ -91,9 +114,14 @@ const Settings = props => {
 
                 setLeft(hide)
                 setRight(show)
+                setFetching(false)
             })
             .catch(error => console.error(error))
     },[])
+
+    const buttonClassname = clsx({
+        [classes.buttonSuccess]: fetching,
+    })
 
     const handleToggle = value => () => {
         const currentIndex = checked.indexOf(value)
@@ -131,12 +159,16 @@ const Settings = props => {
     }
 
     const handleSubmit = btn => {
+        setFetching(true)
         ApiSettings.saveData({
             pesoCheck: right.filter(currency => currency.key === 'COP').length > 0 ? 1 : 0,
             dollarCheck: right.filter(currency => currency.key === 'USD').length > 0 ? 1 : 0,
             bcvCheck: right.filter(currency => currency.key === 'BCV').length > 0 ? 1 : 0
         })
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response)
+                setFetching(false)
+            })
             .catch(error => console.error(error))
     }
 
@@ -159,17 +191,21 @@ const Settings = props => {
           <Divider />
           <List style={{minWidth: '100%'}} className={classes.list} dense component='div' role='list'>
             {
-                items.map(value => <ListItem key={value.key} role='listitem' button onClick={handleToggle(value)}>
-                                        <ListItemIcon>
-                                            <StyledCheckbox
-                                                checked={checked.indexOf(value) !== -1}
-                                                tabIndex={-1}
-                                                disableRipple
-                                                inputProps={{ 'aria-labelledby': `transfer-list-all-item-${value.key}-label` }}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText id={`transfer-list-all-item-${value.key}-label`} primary={value.label} />
-                                    </ListItem>)
+                !fetching
+                    ?   (items.map(value => <ListItem key={value.key} role='listitem' button onClick={handleToggle(value)}>
+                                                <ListItemIcon>
+                                                    <StyledCheckbox
+                                                        checked={checked.indexOf(value) !== -1}
+                                                        tabIndex={-1}
+                                                        disableRipple
+                                                        inputProps={{ 'aria-labelledby': `transfer-list-all-item-${value.key}-label` }}
+                                                    />
+                                                </ListItemIcon>
+                                                <ListItemText id={`transfer-list-all-item-${value.key}-label`} primary={value.label} />
+                                            </ListItem>))
+                    :   <Box mt={2} mb={2} className={classes.contCircularProgress}>
+                            <CircularProgress />
+                        </Box>
             }
             <ListItem />
           </List>
@@ -239,19 +275,24 @@ const Settings = props => {
                                 </Grid>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} md={12} sm={12}>
+                        <Grid item xs={12} md={12} sm={12} style={{position: 'relative'}}>
                             <Button
                                 variant='contained'
                                 style={{
                                     background: '#2196f3',
-                                    color: '#fff',
+                                    color: fetching ? '#2196f3' : '#fff',
                                     fontWeight: 'bold'
                                 }}
                                 onClick={handleSubmit}
+                                className={buttonClassname}
+                                disabled={fetching}
                                 fullWidth
                             >
                                 Guardar
                             </Button>
+                            {
+                                fetching && <CircularProgress size={24} className={classes.buttonProgress} />
+                            }
                         </Grid>
                     </Grid>
                 </CardContent>

@@ -23,9 +23,8 @@ const ShortCode = props => {
                     <Box mt={2} mb={2}>
                         <TextField
                             type='text'
-                            placeholder='[shortcode]'
-                            value='[shortcode]'
-                            variant='outlined'
+                            placeholder='[monitordollar]'
+                            value='[monitordollar]'
                             label='Shortcode'
                             disabled
                             fullWidth

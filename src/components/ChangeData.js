@@ -1,4 +1,5 @@
 import React, {  useState , useEffect , Fragment } from 'react'
+import clsx from 'clsx'
 
 import * as Changes from '../api/Changes'
 
@@ -10,7 +11,8 @@ import {
     Grid,
     Divider,
     TextField,
-    Button
+    Button,
+    CircularProgress
 } from '@material-ui/core'
 
 import {
@@ -19,20 +21,46 @@ import {
     TrendingFlat
 } from '@material-ui/icons'
 
+import {
+    green,
+    yellow,
+    red
+} from '@material-ui/core/colors'
+
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+    buttonSuccess: {
+        backgroundColor: '#2196f3',
+    },
+    buttonProgress: {
+        color: '#fff',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+}))
+
 const ChangeData = props => {
+
+    const classes = useStyles()
+
+    const [fetching,setFetching] = useState(false)
 
     const [data,setData] = useState({
                                 usd: {
                                     value: 0,
-                                    icon: <TrendingUp style={{marginLeft: '15px'}} />
+                                    icon: <TrendingUp style={{marginLeft: '15px', color: green[500]}} />
                                 },
                                 cop: {
                                     value: 0,
-                                    icon: <TrendingUp style={{marginLeft: '15px'}} />
+                                    icon: <TrendingUp style={{marginLeft: '15px', color: green[500]}} />
                                 },
                                 bcv: {
                                     value: 0,
-                                    icon: <TrendingUp style={{marginLeft: '15px'}} />
+                                    icon: <TrendingUp style={{marginLeft: '15px', color: green[500]}} />
                                 },
                                 date: '',
                                 user: ''
@@ -46,15 +74,16 @@ const ChangeData = props => {
 
     const trendingIcon = (actual,prev) => {
         if(actual > prev){
-            return <TrendingUp style={{marginLeft: '15px'}} />
+            return <TrendingUp style={{marginLeft: '15px', color: green[500]}} />
         }else if(actual < prev){
-            return <TrendingDown style={{marginLeft: '15px'}} />
+            return <TrendingDown style={{marginLeft: '15px', color: red[500]}} />
         }
 
-        return <TrendingFlat style={{marginLeft: '15px'}} />
+        return <TrendingFlat style={{marginLeft: '15px', color: yellow[700]}} />
     }
 
     useEffect(() => {
+        setFetching(true)
         Changes.getData()
             .then(response => {
                 if(response.length){
@@ -82,6 +111,8 @@ const ChangeData = props => {
                         cop: parseFloat(response[0].peso),
                         bcv: parseFloat(response[0].bcv),
                     })
+
+                    setFetching(false)
                 }
             })
             .catch(error => console.error(error))
@@ -131,6 +162,10 @@ const ChangeData = props => {
         },
     ]
 
+    const buttonClassname = clsx({
+        [classes.buttonSuccess]: fetching,
+    })
+
     const handleChange = input => {
         setInputState({
             ...inputState,
@@ -139,32 +174,39 @@ const ChangeData = props => {
     }
 
     const handleSubmit = btn => {
-        Changes.putData({
-            dollar: inputState.usd,
-            peso: inputState.cop,
-            bcv: inputState.bcv
-        })
-            .then(response => {
-                if(response.success && response.statusCode === 200){
-                    let prevData = {...data}
-                    setData({
-                        ...data,
-                        usd: {
-                            value: inputState.usd,
-                            icon: trendingIcon(parseFloat(inputState.usd),parseFloat(prevData.usd.value))
-                        },
-                        cop: {
-                            value: inputState.cop,
-                            icon: trendingIcon(parseFloat(inputState.cop),parseFloat(prevData.cop.value))
-                        },
-                        bcv: {
-                            value: inputState.bcv,
-                            icon: trendingIcon(parseFloat(inputState.bcv),parseFloat(prevData.bcv.value))
-                        },
-                    })
-                }
+
+        if (!fetching) {
+            setFetching(true)
+
+            Changes.putData({
+                dollar: inputState.usd,
+                peso: inputState.cop,
+                bcv: inputState.bcv
             })
-            .catch(error => console.error(error))
+                .then(response => {
+                    if(response.success && response.statusCode === 200){
+                        let prevData = {...data}
+                        setData({
+                            ...data,
+                            usd: {
+                                value: inputState.usd,
+                                icon: trendingIcon(parseFloat(inputState.usd),parseFloat(prevData.usd.value))
+                            },
+                            cop: {
+                                value: inputState.cop,
+                                icon: trendingIcon(parseFloat(inputState.cop),parseFloat(prevData.cop.value))
+                            },
+                            bcv: {
+                                value: inputState.bcv,
+                                icon: trendingIcon(parseFloat(inputState.bcv),parseFloat(prevData.bcv.value))
+                            },
+                        })
+                    }
+                    
+                    setFetching(false)
+                })
+                .catch(error => console.error(error))
+        }
     }
 
     return (
@@ -191,22 +233,26 @@ const ChangeData = props => {
                                 </Typography>
                             </Box>
                             {
-                                info.length
-                                    ?   info.map(data => <Fragment key={info.indexOf(data)}>
-                                                            <Box mt={2} mb={2}>
-                                                                <Typography variant='subtitle1' gutterBottom style={{fontWeight: 'bold',display: 'flex', alignItems: 'center'}}>
-                                                                    { `${data.label}: ` }
-                                                                    <Typography variant='body1' style={{marginLeft: '15px',display: 'flex', alignItems: 'center'}}>
-                                                                        { `${data.value} ` }
-                                                                        {
-                                                                            data.icon ? data.icon : ''
-                                                                        }
+                                !fetching
+                                    ? (info.length
+                                        ?   info.map(data => <Fragment key={info.indexOf(data)}>
+                                                                <Box mt={2} mb={2}>
+                                                                    <Typography variant='subtitle1' gutterBottom style={{fontWeight: 'bold',display: 'flex', alignItems: 'center'}}>
+                                                                        { `${data.label}: ` }
+                                                                        <Typography variant='body1' style={{marginLeft: '15px',display: 'flex', alignItems: 'center'}}>
+                                                                            { `${data.value} ` }
+                                                                            {
+                                                                                data.icon ? data.icon : ''
+                                                                            }
+                                                                        </Typography>
                                                                     </Typography>
-                                                                </Typography>
-                                                                
-                                                            </Box>
-                                                         </Fragment>)
-                                    :   <Fragment />
+                                                                    
+                                                                </Box>
+                                                             </Fragment>)
+                                        :   <Fragment />)
+                                    :   <Box mt={2} mb={2} align='center'>
+                                            <CircularProgress />
+                                        </Box>
                             }
                         </CardContent>
                     </Card>
@@ -226,7 +272,6 @@ const ChangeData = props => {
                                                                 <Box mt={3} mb={3}>
                                                                     <TextField
                                                                         type='number'
-                                                                        variant='outlined'
                                                                         label={input.label}
                                                                         name={input.name}
                                                                         value={input.value}
@@ -243,18 +288,23 @@ const ChangeData = props => {
                             }                            
                         </CardContent>
                     </Card>
-                    <Box mt={7}>
+                    <Box mt={7} style={{position: 'relative'}}>
                         <Button
                             variant='outlined'
                             style={{
-                                borderColor: '#fff',
-                                color: '#fff'
+                                borderColor: fetching ? '#2196f3' : '#fff',
+                                color: fetching ? '#2196f3' : '#fff'
                             }}
+                            disabled={fetching}
+                            className={buttonClassname}
                             onClick={handleSubmit}
                             fullWidth
                         >
                             Guardar
                         </Button>
+                        {
+                            fetching && <CircularProgress size={24} className={classes.buttonProgress} />
+                        }
                     </Box>
                 </Grid>
             </Grid>
